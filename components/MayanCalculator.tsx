@@ -95,6 +95,7 @@ export default function MayanCalculator() {
             border border-white/10
             shadow-2xl
             text-center
+            animate-in fade-in slide-in-from-bottom-4 duration-700
           "
         >
           <div className="space-y-2">
@@ -132,55 +133,45 @@ export default function MayanCalculator() {
               ))}
             </select>
 
-            <select
+            <input
+              type="number"
               value={day}
               onChange={(e) => setDay(e.target.value)}
+              placeholder="Day"
+              min="1"
+              max="31"
               className="
                 bg-black/40
                 text-white
                 border border-white/20
-                rounded-xl px-4 py-4 pr-10
+                rounded-xl px-4 py-4
                 focus:outline-none
                 focus:ring-2 focus:ring-teal-400/60
                 backdrop-blur-md
                 [color-scheme:dark]
-                appearance-none
-                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
-                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
+                placeholder:text-white/40
               "
-            >
-              <option value="">Day</option>
-              {days.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
+            />
 
-            <select
+            <input
+              type="number"
               value={year}
               onChange={(e) => setYear(e.target.value)}
+              placeholder="Year"
+              min="1900"
+              max={currentYear}
               className="
                 bg-black/40
                 text-white
                 border border-white/20
-                rounded-xl px-4 py-4 pr-10
+                rounded-xl px-4 py-4
                 focus:outline-none
                 focus:ring-2 focus:ring-teal-400/60
                 backdrop-blur-md
                 [color-scheme:dark]
-                appearance-none
-                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
-                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
+                placeholder:text-white/40
               "
-            >
-              <option value="">Year</option>
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           <button
@@ -216,6 +207,7 @@ export default function MayanCalculator() {
               border border-white/10
               shadow-xl
               text-center
+              animate-in fade-in slide-in-from-bottom-4 duration-700
             "
           >
             <p className="text-xs uppercase tracking-[0.3em] text-white/40">
