@@ -1,67 +1,40 @@
 "use client";
 
-import { useState } from 'react';
-import { getTzolkinDate } from '@/lib/mayan-utils';
+import { useRouter } from "next/navigation";
 
-export default function MayanCalculator() {
-  const [date, setDate] = useState<string>('');
-  const [result, setResult] = useState<any>(null);
-
-  const handleCalculate = () => {
-    if (!date) return;
-    const calculated = getTzolkinDate(date);
-    setResult(calculated);
-  };
+export default function LandingPage() {
+  const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-[#1a120b] text-[#e5d3b3] p-8 flex flex-col items-center">
-      <div className="max-w-xl w-full bg-[#2c241a] border-2 border-[#d4af37] rounded-xl p-8 shadow-2xl">
-        <h1 className="text-3xl font-serif text-[#d4af37] text-center uppercase tracking-widest mb-2">
-          Mayan Spacetime Oracle
+    <main className="min-h-screen bg-gradient-to-b from-black via-[#0f1c1a] to-black text-white flex items-center justify-center px-6">
+      <section className="max-w-4xl text-center space-y-10">
+        
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+          Discover Your
+          <span className="block bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+            Maya Spacetime Identity
+          </span>
         </h1>
-        <p className="text-center text-sm italic text-orange-700/80 mb-8">Next.js TypeScript Edition</p>
 
-        <div className="flex flex-col gap-4 mb-8">
-          <input 
-            type="date" 
-            className="bg-[#1a120b] border border-[#d4af37] p-3 rounded text-white outline-none focus:ring-2 ring-[#d4af37]"
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <button 
-            onClick={handleCalculate}
-            className="bg-[#d4af37] text-[#1a120b] font-bold py-3 px-6 rounded hover:bg-[#f1c40f] transition-all transform active:scale-95"
-          >
-            DISCOVER KIN
-          </button>
-        </div>
+        <p className="text-lg md:text-xl text-white/70 leading-relaxed">
+          In the Maya worldview, your birth date is not random.  
+          It carries a <span className="text-amber-400">Tone</span> and a
+          <span className="text-teal-400"> Sign</span> —  
+          a unique energetic signature that shapes how you think, feel, and move through life.
+        </p>
 
-        {result && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="text-center mb-8">
-              <span className="text-5xl font-bold text-[#d4af37]">
-                {result.tone} {result.sign}
-              </span>
-            </div>
+        <button
+          onClick={() => router.push("/calculator")}
+          className="px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-teal-400 
+          text-black font-semibold text-lg shadow-lg hover:scale-105 transition"
+        >
+          🔍 Discover Your True Self
+        </button>
 
-            <div className="space-y-6">
-              <section className="border-l-4 border-[#d4af37] pl-4">
-                <h3 className="text-[#d4af37] font-bold uppercase text-sm tracking-tighter">Galactic Tone {result.tone}</h3>
-                <p className="text-lg font-semibold">{result.toneData.name}</p>
-                <p className="text-sm opacity-80">{result.toneData.meaning}</p>
-                <p className="mt-2 inline-block px-2 py-1 bg-[#d4af37] text-[#1a120b] text-xs font-bold rounded">
-                  ACTION: {result.toneData.action}
-                </p>
-              </section>
-
-              <section className="border-l-4 border-[#d4af37] pl-4">
-                <h3 className="text-[#d4af37] font-bold uppercase text-sm tracking-tighter">Solar Day Sign</h3>
-                <p className="text-lg font-semibold">{result.sign}</p>
-                <p className="text-sm opacity-80">This sign represents your solar identity and the archetype you embody in this spacetime cycle.</p>
-              </section>
-            </div>
-          </div>
-        )}
-      </div>
+        <p className="text-sm text-white/40 italic">
+          Based on Maya Spacetime & Tzolkʼin Calendar
+        </p>
+      </section>
     </main>
   );
 }
