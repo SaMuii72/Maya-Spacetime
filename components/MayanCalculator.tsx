@@ -13,6 +13,8 @@ export default function MayanCalculator() {
   const [year, setYear] = useState("");
   const [result, setResult] = useState<any>(null);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [showReveal, setShowReveal] = useState(false);
+  const [showFullReading, setShowFullReading] = useState(false);
   const router = useRouter();
 
   const handleCalculate = () => {
@@ -22,12 +24,23 @@ export default function MayanCalculator() {
       const dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
       const tzolkinResult = getTzolkinDate(dateString);
       setResult(tzolkinResult);
+      setIsFlipping(false);
+      setShowReveal(true);
     }, 800);
   };
 
   const handleReset = () => {
     setResult(null);
     setIsFlipping(false);
+    setShowReveal(false);
+    setShowFullReading(false);
+  };
+
+  const handleViewReading = () => {
+    setShowReveal(false);
+    setTimeout(() => {
+      setShowFullReading(true);
+    }, 300);
   };
 
   const narrative = result
@@ -80,19 +93,21 @@ export default function MayanCalculator() {
   return (
     <div className="w-full flex flex-col items-center space-y-16 px-6">
       
-      {/* BACK BUTTON */}
-      <button
-        onClick={() => result ? handleReset() : router.push("/")}
-        className="fixed top-8 left-8 flex items-center gap-2 text-white/70 hover:text-white transition"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        {result ? "Calculate Again" : "Back"}
-      </button>
+      {/* BACK BUTTON - SHOW ALWAYS EXCEPT DURING FLIP */}
+      {!isFlipping && (
+        <button
+          onClick={() => result ? handleReset() : router.push("/")}
+          className="fixed top-8 left-8 flex items-center gap-2 text-white/70 hover:text-white transition z-10"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          {result ? "Calculate Again" : "Back"}
+        </button>
+      )}
       
-      {/* INPUT CARD — SHOW ONLY IF NO RESULT */}
-      {!result && (
+      {/* INPUT CARD — SHOW ONLY IF NO RESULT AND NOT FLIPPING */}
+      {!result && !isFlipping && (
         <div className="w-full max-w-4xl space-y-12 text-center">
           {/* HEADER TEXT */}
           <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-700">
@@ -228,17 +243,57 @@ export default function MayanCalculator() {
         </div>
       )}
 
-      {/* CARD FLIP ANIMATION */}
+      {/* CARD FLIP ANIMATION - FULLSCREEN CENTER */}
       {isFlipping && !result && (
-        <div className="w-full max-w-xl h-96 flex items-center justify-center">
-          <div className="animate-flip-card w-full h-full rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex items-center justify-center">
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50">
+          <div className="animate-flip-card w-full max-w-xl h-96 rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex items-center justify-center">
             <div className="text-6xl">✨</div>
           </div>
         </div>
       )}
 
-      {/* RESULT */}
-      {result && (
+      {/* CARD REVEAL - SHOW RESULT ON CARD */}
+      {showReveal && result && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50">
+          <div className="w-full max-w-xl h-96 rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex flex-col items-center justify-center p-10 animate-in fade-in zoom-in duration-500 relative overflow-hidden">
+            {/* Sparkle decorations */}
+            <div className="absolute top-8 left-12 text-amber-400 animate-pulse">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+            </div>
+            <div className="absolute top-16 right-16 text-teal-400 animate-pulse" style={{animationDelay: '0.3s'}}>
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+            </div>
+            <div className="absolute bottom-12 left-20 text-amber-300 animate-pulse" style={{animationDelay: '0.6s'}}>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+            </div>
+            <div className="absolute bottom-16 right-12 text-teal-300 animate-pulse" style={{animationDelay: '0.9s'}}>
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+            </div>
+            
+            <p className="text-white/60 text-sm uppercase tracking-widest mb-8">Your Maya Signature</p>
+            <h2 className="text-6xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent mb-12">
+              {result.tone.name} · {result.sign.name}
+            </h2>
+            <button
+              onClick={handleViewReading}
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-teal-400 text-black font-semibold hover:scale-105 transition shadow-lg"
+            >
+              View Full Reading →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* RESULT - FULL READING */}
+      {showFullReading && result && (
         <div className="w-full flex flex-col items-center space-y-20">
 
           {/* CARD 1: QUICK IDENTITY */}
