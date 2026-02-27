@@ -103,7 +103,7 @@ export default function MayanCalculator() {
     switch (currentPage) {
       case 0: // Overview
         return (
-          <div className="flex flex-col justify-between min-h-[600px] text-center">
+          <div className="flex flex-col h-[350px] text-center">
             <div className="space-y-8">
               <p className="text-xs uppercase tracking-[0.3em] text-white/40">
                 Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
@@ -112,80 +112,83 @@ export default function MayanCalculator() {
                   day: "numeric",
                 })}
               </p>
-              <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-5xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
                 {result.tone.name} · {result.sign.name}
               </h2>
             </div>
-            <div className="space-y-8 text-center max-w-2xl mx-auto">
+            <div className="space-y-4 md:space-y-6 text-center max-w-2xl mx-auto py-12 md:py-20 px-4">
               <div className="space-y-3">
-                <h3 className="text-2xl text-amber-400 font-semibold tracking-wide">
+                <h3 className="text-xl md:text-2xl text-amber-400 font-semibold tracking-wide">
                   Galactic Tone — {result.tone.action}
                 </h3>
-                <p className="text-white/80 text-lg leading-relaxed">
+                <p className="text-white/80 text-base md:text-lg leading-relaxed">
                   {result.tone.personality.core}
                 </p>
               </div>
               <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <div className="space-y-3">
-                <h3 className="text-2xl text-teal-400 font-semibold tracking-wide">
+                <h3 className="text-xl md:text-2xl text-teal-400 font-semibold tracking-wide">
                   Day Sign — {result.sign.archetype}
                 </h3>
-                <p className="text-white/80 text-lg leading-relaxed">
+                <p className="text-white/80 text-base md:text-lg leading-relaxed">
                   {result.sign.personality.essence}
                 </p>
               </div>
             </div>
-            <div></div>
           </div>
         );
       
       case 1: // Complete Profile
         return (
-          <div className="space-y-6 text-left overflow-y-auto max-h-[500px] pr-4">
-            <div className="text-center space-y-3">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                Mayan Spacetime Reading
-              </p>
-              <h3 className="text-3xl font-serif font-semibold text-white">
-                Your Complete Profile
-              </h3>
-              <div className="flex justify-center">
-                <div className="h-px w-40 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+          <div className="h-[350px] flex flex-col">
+            <div className="space-y-6 text-left overflow-y-auto flex-1 pr-4">
+              <div className="text-center space-y-3">
+                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                  Mayan Spacetime Reading
+                </p>
+                <h3 className="text-3xl font-serif font-semibold text-white">
+                  Your Complete Profile
+                </h3>
+                <div className="flex justify-center">
+                  <div className="h-px w-40 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+                </div>
               </div>
+              <p className="text-white/90 text-lg">
+                {highlightText(narrative?.intro || "", highlightRules)}
+              </p>
+              <p className="text-white/80">
+                {highlightText(narrative?.tone || "", highlightRules)}
+              </p>
+              <p className="text-white/80">
+                {highlightText(narrative?.sign || "", highlightRules)}
+              </p>
+              <p className="text-purple-300 italic">
+                {highlightText(narrative?.interaction || "", highlightRules)}
+              </p>
+              <p className="text-white/70">
+                {highlightText(narrative?.lifeTheme || "", highlightRules)}
+              </p>
+              <p className="text-white/50 italic">
+                {highlightText(narrative?.closing || "", highlightRules)}
+              </p>
             </div>
-            <p className="text-white/90 text-lg">
-              {highlightText(narrative?.intro || "", highlightRules)}
-            </p>
-            <p className="text-white/80">
-              {highlightText(narrative?.tone || "", highlightRules)}
-            </p>
-            <p className="text-white/80">
-              {highlightText(narrative?.sign || "", highlightRules)}
-            </p>
-            <p className="text-purple-300 italic">
-              {highlightText(narrative?.interaction || "", highlightRules)}
-            </p>
-            <p className="text-white/70">
-              {highlightText(narrative?.lifeTheme || "", highlightRules)}
-            </p>
-            <p className="text-white/50 italic">
-              {highlightText(narrative?.closing || "", highlightRules)}
-            </p>
           </div>
         );
       
       case 2: // Work & Career
         return (
-          <div className="space-y-8">
-            <div className="flex items-center gap-3 justify-center">
-              <div className="text-4xl">💼</div>
-              <h3 className="text-3xl font-serif font-semibold text-amber-400">Work & Career</h3>
+          <div className="flex flex-col justify-between h-[350px]">
+            <div className="space-y-8">
+              <div className="flex items-center gap-3 justify-center">
+                <div className="text-4xl">💼</div>
+                <h3 className="text-2xl md:text-3xl font-serif font-semibold text-amber-400">Work & Career</h3>
+              </div>
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
+              <p className="text-white/80 leading-relaxed text-base md:text-lg">
+                {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
+              </p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
-            <p className="text-white/80 leading-relaxed text-lg">
-              {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
-            </p>
-            <div className="flex justify-center items-center gap-4 pt-8 opacity-30">
+            <div className="flex justify-center items-center gap-4 opacity-30">
               <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none">
                 <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" className="text-amber-400" />
                 <circle cx="50" cy="50" r="35" stroke="currentColor" strokeWidth="1.5" className="text-amber-300" />
@@ -207,16 +210,18 @@ export default function MayanCalculator() {
       
       case 3: // Love & Relationships
         return (
-          <div className="space-y-8">
-            <div className="flex items-center gap-3 justify-center">
-              <div className="text-4xl">💖</div>
-              <h3 className="text-3xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
+          <div className="flex flex-col justify-between h-[350px]">
+            <div className="space-y-8">
+              <div className="flex items-center gap-3 justify-center">
+                <div className="text-4xl">💖</div>
+                <h3 className="text-2xl md:text-3xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
+              </div>
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-pink-400/40 to-transparent" />
+              <p className="text-white/80 leading-relaxed text-base md:text-lg">
+                {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
+              </p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-pink-400/40 to-transparent" />
-            <p className="text-white/80 leading-relaxed text-lg">
-              {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
-            </p>
-            <div className="flex justify-center items-center gap-4 pt-8 opacity-30">
+            <div className="flex justify-center items-center gap-4 opacity-30">
               <svg className="w-14 h-14" viewBox="0 0 100 100" fill="none">
                 <path d="M50 85 C50 85, 20 60, 20 40 C20 25, 30 15, 42 15 C48 15, 50 20, 50 20 C50 20, 52 15, 58 15 C70 15, 80 25, 80 40 C80 60, 50 85, 50 85 Z" stroke="currentColor" strokeWidth="2" fill="currentColor" className="text-pink-400/40" />
               </svg>
