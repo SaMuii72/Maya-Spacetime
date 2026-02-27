@@ -28,8 +28,11 @@ export default function LandingPage() {
 
         <button
           onClick={() => router.push("/calculator")}
-          className="px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-teal-400 
-          text-black font-semibold text-lg shadow-lg hover:scale-105 transition animate-in fade-in zoom-in duration-700 delay-300"
+          className="
+          animate-mystic
+          px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 to-teal-400 
+          text-black font-semibold text-lg shadow-lg hover:scale-105 transition animate-in fade-in zoom-in duration-700 delay-300
+          "
         >
           🔍 Discover Your True Self
         </button>
