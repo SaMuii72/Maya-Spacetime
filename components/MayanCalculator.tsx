@@ -12,13 +12,22 @@ export default function MayanCalculator() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [result, setResult] = useState<any>(null);
+  const [isFlipping, setIsFlipping] = useState(false);
   const router = useRouter();
 
   const handleCalculate = () => {
     if (!day || !month || !year) return;
-    const dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    const tzolkinResult = getTzolkinDate(dateString);
-    setResult(tzolkinResult);
+    setIsFlipping(true);
+    setTimeout(() => {
+      const dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      const tzolkinResult = getTzolkinDate(dateString);
+      setResult(tzolkinResult);
+    }, 800);
+  };
+
+  const handleReset = () => {
+    setResult(null);
+    setIsFlipping(false);
   };
 
   const narrative = result
@@ -73,31 +82,42 @@ export default function MayanCalculator() {
       
       {/* BACK BUTTON */}
       <button
-        onClick={() => router.push("/")}
+        onClick={() => result ? handleReset() : router.push("/")}
         className="fixed top-8 left-8 flex items-center gap-2 text-white/70 hover:text-white transition"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-        Back
+        {result ? "Calculate Again" : "Back"}
       </button>
       
       {/* INPUT CARD — SHOW ONLY IF NO RESULT */}
       {!result && (
-        <div
-          className="
-            w-full max-w-xl
-            rounded-2xl
-            p-8
-            space-y-6
-            bg-white/5
-            backdrop-blur-xl
-            border border-white/10
-            shadow-2xl
-            text-center
-            animate-in fade-in slide-in-from-bottom-4 duration-700
-          "
-        >
+        <div className="w-full max-w-4xl space-y-12 text-center">
+          {/* HEADER TEXT */}
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-700">
+            <h1 className="text-5xl md:text-6xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+              Discover Your <br /> Maya Spacetime Identity
+            </h1>
+            <p className="text-xl text-white/70 max-w-2xl mx-auto">
+              Enter your birth date to reveal your unique energetic signature in the Tzolk'in calendar — a 260-day sacred cycle that maps the rhythm of consciousness itself.
+            </p>
+          </div>
+
+          {/* DATE INPUT CARD */}
+          <div
+            className="
+              w-full max-w-xl mx-auto
+              rounded-2xl
+              p-8
+              space-y-6
+              bg-white/5
+              backdrop-blur-xl
+              border border-white/10
+              shadow-2xl
+              animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200
+            "
+          >
           <div className="space-y-2">
             <label className="block text-lg font-semibold tracking-wide text-white-400">
               Your Date of Birth
@@ -188,6 +208,32 @@ export default function MayanCalculator() {
           >
             ✨ Reveal My Spacetime Signature
           </button>
+          </div>
+
+          {/* DECORATIVE ELEMENTS */}
+          <div className="flex justify-center gap-8 text-white/90 text-sm animate-in fade-in duration-700 delay-500">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🌙</span>
+              <span>20 Day Signs</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">✨</span>
+              <span>13 Galactic Tones</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🔮</span>
+              <span>260 Sacred Days</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CARD FLIP ANIMATION */}
+      {isFlipping && !result && (
+        <div className="w-full max-w-xl h-96 flex items-center justify-center">
+          <div className="animate-flip-card w-full h-full rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex items-center justify-center">
+            <div className="text-6xl">✨</div>
+          </div>
         </div>
       )}
 
