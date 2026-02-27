@@ -17,7 +17,6 @@ export default function MayanCalculator() {
   const [showFullReading, setShowFullReading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
-
   const handleCalculate = () => {
     if (!day || !month || !year) return;
     setIsFlipping(true);
@@ -95,7 +94,7 @@ export default function MayanCalculator() {
   ];
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
-
+  
   // Render page content based on currentPage
   const renderPageContent = () => {
     if (!result) return null;
@@ -245,8 +244,8 @@ export default function MayanCalculator() {
 
   return (
     <div className="w-full flex flex-col items-center space-y-16 px-6">
-      
-      {/* BACK BUTTON */}
+
+       {/* BACK BUTTON */}
       {!isFlipping && (
         <button
           onClick={() => result ? handleReset() : router.push("/")}
@@ -255,10 +254,10 @@ export default function MayanCalculator() {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          {result ? "Calculate Again" : "Back"}
+          {result ? "" : "Back"}
         </button>
       )}
-      
+
       {/* INPUT CARD */}
       {!result && !isFlipping && (
         <div className="w-full max-w-4xl space-y-12 text-center">
@@ -407,6 +406,30 @@ export default function MayanCalculator() {
       {/* PAGINATED READING CARD */}
       {showFullReading && result && (
         <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50 p-6">
+          {/* BACK TO BIRTH DATE */}
+          <button
+            onClick={handleReset}
+            className="fixed top-8 left-8 z-50
+                      flex items-center gap-2
+                      text-white/70 hover:text-white
+                      transition
+                      animate-in fade-in slide-in-from-left-2 duration-500"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back
+          </button>
           <div className="w-full max-w-4xl min-h-[600px] rounded-2xl bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col relative">
             {/* Page Content */}
             <div className="flex-1 p-12 overflow-hidden">
