@@ -9,7 +9,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-gradient-to-b from-black via-[#0f1c1a] to-black text-white flex items-center justify-center px-6">
       <section className="max-w-4xl text-center space-y-10">
         
-        <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+        <h1 className="text-5xl md:text-6xl font-serif font-bold tracking-tight">
           Discover Your
           <span className="block bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
             Maya Spacetime Identity

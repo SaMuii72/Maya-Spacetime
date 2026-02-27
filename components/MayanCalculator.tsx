@@ -8,13 +8,16 @@ import { highlightText } from "@/lib/mayan/highlightText";
 import { WORK_LOVE_BY_SIGN } from "@/lib/mayan/workLoveBySign";
 
 export default function MayanCalculator() {
-  const [date, setDate] = useState("");
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const [result, setResult] = useState<any>(null);
   const router = useRouter();
 
   const handleCalculate = () => {
-    if (!date) return;
-    const tzolkinResult = getTzolkinDate(date);
+    if (!day || !month || !year) return;
+    const dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const tzolkinResult = getTzolkinDate(dateString);
     setResult(tzolkinResult);
   };
 
@@ -47,6 +50,24 @@ export default function MayanCalculator() {
       ]
     : [];
 
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const months = [
+    { value: "1", label: "January" },
+    { value: "2", label: "February" },
+    { value: "3", label: "March" },
+    { value: "4", label: "April" },
+    { value: "5", label: "May" },
+    { value: "6", label: "June" },
+    { value: "7", label: "July" },
+    { value: "8", label: "August" },
+    { value: "9", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+
   return (
     <div className="w-full flex flex-col items-center space-y-16 px-6">
       
@@ -77,31 +98,90 @@ export default function MayanCalculator() {
           "
         >
           <div className="space-y-2">
-            <label className="block text-sm tracking-wide text-white/70">
+            <label className="block text-lg font-semibold tracking-wide text-white-400">
               Your Date of Birth
             </label>
-            <p className="text-xs text-white/40">
+            <p className="text-sm text-white/60">
               This date anchors your position in Maya spacetime
             </p>
           </div>
 
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="
-              w-full text-center
-              bg-black/40
-              text-white
-              border border-white/20
-              rounded-xl px-5 py-4
-              focus:outline-none
-              focus:ring-2 focus:ring-teal-400/60
-              backdrop-blur-md
-              shadow-inner
-              [color-scheme:dark]
-            "
-          />
+          <div className="grid grid-cols-3 gap-4">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="
+                bg-black/40
+                text-white
+                border border-white/20
+                rounded-xl px-4 py-4 pr-10
+                focus:outline-none
+                focus:ring-2 focus:ring-teal-400/60
+                backdrop-blur-md
+                [color-scheme:dark]
+                appearance-none
+                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
+                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
+              "
+            >
+              <option value="">Month</option>
+              {months.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              className="
+                bg-black/40
+                text-white
+                border border-white/20
+                rounded-xl px-4 py-4 pr-10
+                focus:outline-none
+                focus:ring-2 focus:ring-teal-400/60
+                backdrop-blur-md
+                [color-scheme:dark]
+                appearance-none
+                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
+                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
+              "
+            >
+              <option value="">Day</option>
+              {days.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="
+                bg-black/40
+                text-white
+                border border-white/20
+                rounded-xl px-4 py-4 pr-10
+                focus:outline-none
+                focus:ring-2 focus:ring-teal-400/60
+                backdrop-blur-md
+                [color-scheme:dark]
+                appearance-none
+                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
+                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
+              "
+            >
+              <option value="">Year</option>
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <button
             onClick={handleCalculate}
@@ -139,14 +219,14 @@ export default function MayanCalculator() {
             "
           >
             <p className="text-xs uppercase tracking-[0.3em] text-white/40">
-              Born on {new Date(date).toLocaleDateString("en-US", {
+              Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
               })}
             </p>
 
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
               {result.tone.name} · {result.sign.name}
             </h2>
 
@@ -189,7 +269,7 @@ export default function MayanCalculator() {
               <p className="text-xs uppercase tracking-[0.35em] text-white/40">
                 Mayan Spacetime Reading
               </p>
-              <h3 className="text-4xl font-semibold text-white">
+              <h3 className="text-4xl font-serif font-semibold text-white">
                 Your Complete Profile
               </h3>
             </div>
@@ -237,7 +317,7 @@ export default function MayanCalculator() {
             >
               <div className="flex items-center gap-3">
                 <div className="text-3xl">💼</div>
-                <h3 className="text-2xl font-semibold text-amber-400">Work & Career</h3>
+                <h3 className="text-2xl font-serif font-semibold text-amber-400">Work & Career</h3>
               </div>
               <p className="text-white/80 leading-relaxed">
                 {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
@@ -258,7 +338,7 @@ export default function MayanCalculator() {
             >
               <div className="flex items-center gap-3">
                 <div className="text-3xl">💖</div>
-                <h3 className="text-2xl font-semibold text-pink-400">Love & Relationships</h3>
+                <h3 className="text-2xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
               </div>
               <p className="text-white/80 leading-relaxed">
                 {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
