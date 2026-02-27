@@ -15,6 +15,7 @@ export default function MayanCalculator() {
   const [isFlipping, setIsFlipping] = useState(false);
   const [showReveal, setShowReveal] = useState(false);
   const [showFullReading, setShowFullReading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
 
   const handleCalculate = () => {
@@ -34,14 +35,19 @@ export default function MayanCalculator() {
     setIsFlipping(false);
     setShowReveal(false);
     setShowFullReading(false);
+    setCurrentPage(0);
   };
 
   const handleViewReading = () => {
     setShowReveal(false);
     setTimeout(() => {
       setShowFullReading(true);
+      setCurrentPage(0);
     }, 300);
   };
+
+  const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, 3));
+  const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 0));
 
   const narrative = result
     ? generateMayanNarrative(result.toneNumber, result.sign)
@@ -279,9 +285,28 @@ export default function MayanCalculator() {
             </div>
             
             <p className="text-white/60 text-sm uppercase tracking-widest mb-8">Your Maya Signature</p>
-            <h2 className="text-6xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent mb-12">
+            
+            {/* Decorative line top */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+              <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-teal-400 to-transparent"></div>
+            </div>
+            
+            <h2 className="text-6xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent mb-6 animate-in zoom-in duration-700 drop-shadow-[0_0_30px_rgba(251,191,36,0.3)]">
               {result.tone.name} · {result.sign.name}
             </h2>
+            
+            {/* Decorative line bottom */}
+            <div className="flex items-center gap-3 mb-10">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+              <svg className="w-3 h-3 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
+              </svg>
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-teal-400 to-transparent"></div>
+            </div>
             <button
               onClick={handleViewReading}
               className="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-teal-400 text-black font-semibold hover:scale-105 transition shadow-lg"
@@ -308,6 +333,10 @@ export default function MayanCalculator() {
               border border-white/10
               shadow-xl
               text-center
+              transition-all duration-300
+              hover:scale-[1.01]
+              hover:border-white/20
+              hover:shadow-2xl
               animate-in fade-in slide-in-from-bottom-4 duration-700
             "
           >
@@ -356,6 +385,9 @@ export default function MayanCalculator() {
               backdrop-blur-xl
               border border-white/10
               shadow-2xl
+              transition-all duration-300
+              hover:scale-[1.005]
+              hover:border-white/20
             "
           >
             <div className="text-center space-y-3">
@@ -406,6 +438,10 @@ export default function MayanCalculator() {
                 backdrop-blur-xl
                 border border-amber-400/20
                 shadow-xl
+                transition-all duration-300
+                hover:scale-[1.02]
+                hover:border-amber-400/30
+                hover:shadow-2xl
               "
             >
               <div className="flex items-center gap-3">
@@ -427,6 +463,10 @@ export default function MayanCalculator() {
                 backdrop-blur-xl
                 border border-pink-400/20
                 shadow-xl
+                transition-all duration-300
+                hover:scale-[1.02]
+                hover:border-pink-400/30
+                hover:shadow-2xl
               "
             >
               <div className="flex items-center gap-3">
