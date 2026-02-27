@@ -103,17 +103,19 @@ export default function MayanCalculator() {
     switch (currentPage) {
       case 0: // Overview
         return (
-          <div className="space-y-8 text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/40">
-              Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-            <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
-              {result.tone.name} · {result.sign.name}
-            </h2>
+          <div className="flex flex-col justify-between min-h-[600px] text-center">
+            <div className="space-y-8">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/40">
+                Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+              <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+                {result.tone.name} · {result.sign.name}
+              </h2>
+            </div>
             <div className="space-y-8 text-center max-w-2xl mx-auto">
               <div className="space-y-3">
                 <h3 className="text-2xl text-amber-400 font-semibold tracking-wide">
@@ -133,6 +135,7 @@ export default function MayanCalculator() {
                 </p>
               </div>
             </div>
+            <div></div>
           </div>
         );
       
@@ -173,7 +176,7 @@ export default function MayanCalculator() {
       
       case 2: // Work & Career
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3 justify-center">
               <div className="text-4xl">💼</div>
               <h3 className="text-3xl font-serif font-semibold text-amber-400">Work & Career</h3>
@@ -182,12 +185,29 @@ export default function MayanCalculator() {
             <p className="text-white/80 leading-relaxed text-lg">
               {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
             </p>
+            <div className="flex justify-center items-center gap-4 pt-8 opacity-30">
+              <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" className="text-amber-400" />
+                <circle cx="50" cy="50" r="35" stroke="currentColor" strokeWidth="1.5" className="text-amber-300" />
+                <circle cx="50" cy="50" r="25" stroke="currentColor" strokeWidth="1" className="text-amber-200" />
+                <path d="M50 5 L50 25 M50 75 L50 95 M5 50 L25 50 M75 50 L95 50" stroke="currentColor" strokeWidth="2" className="text-amber-400" />
+                <circle cx="50" cy="50" r="8" fill="currentColor" className="text-amber-400" />
+              </svg>
+              <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
+                <path d="M50 10 L65 40 L95 45 L72.5 67 L78 97 L50 82 L22 97 L27.5 67 L5 45 L35 40 Z" stroke="currentColor" strokeWidth="2" fill="currentColor" className="text-amber-400/40" />
+              </svg>
+              <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none">
+                <rect x="15" y="15" width="70" height="70" stroke="currentColor" strokeWidth="2" className="text-amber-400" transform="rotate(45 50 50)" />
+                <rect x="25" y="25" width="50" height="50" stroke="currentColor" strokeWidth="1.5" className="text-amber-300" transform="rotate(45 50 50)" />
+                <circle cx="50" cy="50" r="6" fill="currentColor" className="text-amber-400" />
+              </svg>
+            </div>
           </div>
         );
       
       case 3: // Love & Relationships
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3 justify-center">
               <div className="text-4xl">💖</div>
               <h3 className="text-3xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
@@ -196,6 +216,20 @@ export default function MayanCalculator() {
             <p className="text-white/80 leading-relaxed text-lg">
               {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
             </p>
+            <div className="flex justify-center items-center gap-4 pt-8 opacity-30">
+              <svg className="w-14 h-14" viewBox="0 0 100 100" fill="none">
+                <path d="M50 85 C50 85, 20 60, 20 40 C20 25, 30 15, 42 15 C48 15, 50 20, 50 20 C50 20, 52 15, 58 15 C70 15, 80 25, 80 40 C80 60, 50 85, 50 85 Z" stroke="currentColor" strokeWidth="2" fill="currentColor" className="text-pink-400/40" />
+              </svg>
+              <svg className="w-16 h-16" viewBox="0 0 100 100" fill="none">
+                <circle cx="35" cy="40" r="20" stroke="currentColor" strokeWidth="2" className="text-pink-400" />
+                <circle cx="65" cy="40" r="20" stroke="currentColor" strokeWidth="2" className="text-pink-400" />
+                <circle cx="50" cy="65" r="15" stroke="currentColor" strokeWidth="2" className="text-pink-300" />
+                <path d="M35 40 L50 65 M65 40 L50 65" stroke="currentColor" strokeWidth="1.5" className="text-pink-300" />
+              </svg>
+              <svg className="w-14 h-14" viewBox="0 0 100 100" fill="none">
+                <path d="M50 20 L60 45 L85 50 L60 55 L50 80 L40 55 L15 50 L40 45 Z" stroke="currentColor" strokeWidth="2" fill="currentColor" className="text-pink-400/40" />
+              </svg>
+            </div>
           </div>
         );
       
