@@ -96,10 +96,118 @@ export default function MayanCalculator() {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
+  // Render page content based on currentPage
+  const renderPageContent = () => {
+    if (!result) return null;
+
+    switch (currentPage) {
+      case 0: // Overview
+        return (
+          <div className="space-y-8 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/40">
+              Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
+              {result.tone.name} · {result.sign.name}
+            </h2>
+            <div className="space-y-8 text-center max-w-2xl mx-auto">
+              <div className="space-y-3">
+                <h3 className="text-2xl text-amber-400 font-semibold tracking-wide">
+                  Galactic Tone — {result.tone.action}
+                </h3>
+                <p className="text-white/80 text-lg leading-relaxed">
+                  {result.tone.personality.core}
+                </p>
+              </div>
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="space-y-3">
+                <h3 className="text-2xl text-teal-400 font-semibold tracking-wide">
+                  Day Sign — {result.sign.archetype}
+                </h3>
+                <p className="text-white/80 text-lg leading-relaxed">
+                  {result.sign.personality.essence}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 1: // Complete Profile
+        return (
+          <div className="space-y-6 text-left overflow-y-auto max-h-[500px] pr-4">
+            <div className="text-center space-y-3">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                Mayan Spacetime Reading
+              </p>
+              <h3 className="text-3xl font-serif font-semibold text-white">
+                Your Complete Profile
+              </h3>
+              <div className="flex justify-center">
+                <div className="h-px w-40 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+              </div>
+            </div>
+            <p className="text-white/90 text-lg">
+              {highlightText(narrative?.intro || "", highlightRules)}
+            </p>
+            <p className="text-white/80">
+              {highlightText(narrative?.tone || "", highlightRules)}
+            </p>
+            <p className="text-white/80">
+              {highlightText(narrative?.sign || "", highlightRules)}
+            </p>
+            <p className="text-purple-300 italic">
+              {highlightText(narrative?.interaction || "", highlightRules)}
+            </p>
+            <p className="text-white/70">
+              {highlightText(narrative?.lifeTheme || "", highlightRules)}
+            </p>
+            <p className="text-white/50 italic">
+              {highlightText(narrative?.closing || "", highlightRules)}
+            </p>
+          </div>
+        );
+      
+      case 2: // Work & Career
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 justify-center">
+              <div className="text-4xl">💼</div>
+              <h3 className="text-3xl font-serif font-semibold text-amber-400">Work & Career</h3>
+            </div>
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
+            <p className="text-white/80 leading-relaxed text-lg">
+              {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
+            </p>
+          </div>
+        );
+      
+      case 3: // Love & Relationships
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 justify-center">
+              <div className="text-4xl">💖</div>
+              <h3 className="text-3xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
+            </div>
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-pink-400/40 to-transparent" />
+            <p className="text-white/80 leading-relaxed text-lg">
+              {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
+            </p>
+          </div>
+        );
+      
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center space-y-16 px-6">
       
-      {/* BACK BUTTON - SHOW ALWAYS EXCEPT DURING FLIP */}
+      {/* BACK BUTTON */}
       {!isFlipping && (
         <button
           onClick={() => result ? handleReset() : router.push("/")}
@@ -112,10 +220,9 @@ export default function MayanCalculator() {
         </button>
       )}
       
-      {/* INPUT CARD — SHOW ONLY IF NO RESULT AND NOT FLIPPING */}
+      {/* INPUT CARD */}
       {!result && !isFlipping && (
         <div className="w-full max-w-4xl space-y-12 text-center">
-          {/* HEADER TEXT */}
           <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-700">
             <h1 className="text-5xl md:text-6xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
               Discover Your <br /> Maya Spacetime Identity
@@ -125,113 +232,57 @@ export default function MayanCalculator() {
             </p>
           </div>
 
-          {/* DATE INPUT CARD */}
-          <div
-            className="
-              w-full max-w-xl mx-auto
-              rounded-2xl
-              p-8
-              space-y-6
-              bg-white/5
-              backdrop-blur-xl
-              border border-white/10
-              shadow-2xl
-              animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200
-            "
-          >
-          <div className="space-y-2">
-            <label className="block text-lg font-semibold tracking-wide text-white-400">
-              Your Date of Birth
-            </label>
-            <p className="text-sm text-white/60">
-              This date anchors your position in Maya spacetime
-            </p>
-          </div>
+          <div className="w-full max-w-xl mx-auto rounded-2xl p-8 space-y-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+            <div className="space-y-2">
+              <label className="block text-lg font-semibold tracking-wide text-white-400">
+                Your Date of Birth
+              </label>
+              <p className="text-sm text-white/60">
+                This date anchors your position in Maya spacetime
+              </p>
+            </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <select
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              className="
-                bg-black/40
-                text-white
-                border border-white/20
-                rounded-xl px-4 py-4 pr-10
-                focus:outline-none
-                focus:ring-2 focus:ring-teal-400/60
-                backdrop-blur-md
-                [color-scheme:dark]
-                appearance-none
-                bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')]
-                bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat
-              "
+            <div className="grid grid-cols-3 gap-4">
+              <select
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                className="bg-black/40 text-white border border-white/20 rounded-xl px-4 py-4 pr-10 focus:outline-none focus:ring-2 focus:ring-teal-400/60 backdrop-blur-md [color-scheme:dark] appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')] bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat"
+              >
+                <option value="">Month</option>
+                {months.map((m) => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
+                ))}
+              </select>
+
+              <input
+                type="number"
+                value={day}
+                onChange={(e) => setDay(e.target.value)}
+                placeholder="Day"
+                min="1"
+                max="31"
+                className="bg-black/40 text-white border border-white/20 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-teal-400/60 backdrop-blur-md [color-scheme:dark] placeholder:text-white/40"
+              />
+
+              <input
+                type="number"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+                placeholder="Year"
+                min="1900"
+                max={currentYear}
+                className="bg-black/40 text-white border border-white/20 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-teal-400/60 backdrop-blur-md [color-scheme:dark] placeholder:text-white/40"
+              />
+            </div>
+
+            <button
+              onClick={handleCalculate}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-400 to-teal-400 text-black font-semibold tracking-wide hover:scale-[1.02] active:scale-95 transition shadow-lg"
             >
-              <option value="">Month</option>
-              {months.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="number"
-              value={day}
-              onChange={(e) => setDay(e.target.value)}
-              placeholder="Day"
-              min="1"
-              max="31"
-              className="
-                bg-black/40
-                text-white
-                border border-white/20
-                rounded-xl px-4 py-4
-                focus:outline-none
-                focus:ring-2 focus:ring-teal-400/60
-                backdrop-blur-md
-                [color-scheme:dark]
-                placeholder:text-white/40
-              "
-            />
-
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              placeholder="Year"
-              min="1900"
-              max={currentYear}
-              className="
-                bg-black/40
-                text-white
-                border border-white/20
-                rounded-xl px-4 py-4
-                focus:outline-none
-                focus:ring-2 focus:ring-teal-400/60
-                backdrop-blur-md
-                [color-scheme:dark]
-                placeholder:text-white/40
-              "
-            />
+              ✨ Reveal My Spacetime Signature
+            </button>
           </div>
 
-          <button
-            onClick={handleCalculate}
-            className="
-              w-full py-4 rounded-xl
-              bg-gradient-to-r from-amber-400 to-teal-400
-              text-black font-semibold tracking-wide
-              hover:scale-[1.02]
-              active:scale-95
-              transition
-              shadow-lg
-            "
-          >
-            ✨ Reveal My Spacetime Signature
-          </button>
-          </div>
-
-          {/* DECORATIVE ELEMENTS */}
           <div className="flex justify-center gap-8 text-white/90 text-sm animate-in fade-in duration-700 delay-500">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🌙</span>
@@ -249,7 +300,7 @@ export default function MayanCalculator() {
         </div>
       )}
 
-      {/* CARD FLIP ANIMATION - FULLSCREEN CENTER */}
+      {/* CARD FLIP ANIMATION */}
       {isFlipping && !result && (
         <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50">
           <div className="animate-flip-card w-full max-w-xl h-96 rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex items-center justify-center">
@@ -258,11 +309,10 @@ export default function MayanCalculator() {
         </div>
       )}
 
-      {/* CARD REVEAL - SHOW RESULT ON CARD */}
+      {/* CARD REVEAL */}
       {showReveal && result && (
         <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50">
           <div className="w-full max-w-xl h-96 rounded-2xl bg-gradient-to-br from-amber-400/20 to-teal-400/20 backdrop-blur-xl border-2 border-white/30 shadow-2xl flex flex-col items-center justify-center p-10 animate-in fade-in zoom-in duration-500 relative overflow-hidden">
-            {/* Sparkle decorations */}
             <div className="absolute top-8 left-12 text-amber-400 animate-pulse">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0l1.545 7.455L21 9l-7.455 1.545L12 18l-1.545-7.455L3 9l7.455-1.545L12 0z" />
@@ -286,7 +336,6 @@ export default function MayanCalculator() {
             
             <p className="text-white/60 text-sm uppercase tracking-widest mb-8">Your Maya Signature</p>
             
-            {/* Decorative line top */}
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
               <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
@@ -299,7 +348,6 @@ export default function MayanCalculator() {
               {result.tone.name} · {result.sign.name}
             </h2>
             
-            {/* Decorative line bottom */}
             <div className="flex items-center gap-3 mb-10">
               <div className="h-px w-12 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
               <svg className="w-3 h-3 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
@@ -317,165 +365,46 @@ export default function MayanCalculator() {
         </div>
       )}
 
-      {/* RESULT - FULL READING */}
+      {/* PAGINATED READING CARD */}
       {showFullReading && result && (
-        <div className="w-full flex flex-col items-center space-y-20">
-
-          {/* CARD 1: QUICK IDENTITY */}
-          <div
-            className="
-              w-full max-w-2xl
-              rounded-2xl
-              p-10
-              space-y-8
-              bg-white/5
-              backdrop-blur-xl
-              border border-white/10
-              shadow-xl
-              text-center
-              transition-all duration-300
-              hover:scale-[1.01]
-              hover:border-white/20
-              hover:shadow-2xl
-              animate-in fade-in slide-in-from-bottom-4 duration-700
-            "
-          >
-            <p className="text-xs uppercase tracking-[0.3em] text-white/40">
-              Born on {new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-
-            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-amber-400 to-teal-400 bg-clip-text text-transparent">
-              {result.tone.name} · {result.sign.name}
-            </h2>
-
-            <div className="space-y-6 text-left">
-              <div>
-                <h3 className="text-amber-400 font-semibold tracking-wide">
-                  Galactic Tone — {result.tone.action}
-                </h3>
-                <p className="text-white/80">
-                  {result.tone.personality.core}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-teal-400 font-semibold tracking-wide">
-                  Day Sign — {result.sign.archetype}
-                </h3>
-                <p className="text-white/80">
-                  {result.sign.personality.essence}
-                </p>
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-cyan-950 via-slate-950 to-teal-950 z-50 p-6">
+          <div className="w-full max-w-4xl min-h-[600px] rounded-2xl bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col relative">
+            {/* Page Content */}
+            <div className="flex-1 p-12 overflow-hidden">
+              <div key={currentPage} className="animate-in fade-in slide-in-from-right-4 duration-500">
+                {renderPageContent()}
               </div>
             </div>
-          </div>
 
-          {/* CARD 2: COMPLETE PROFILE — WIDE */}
-          <div
-            className="
-              w-full
-              max-w-6xl
-              rounded-2xl
-              p-16
-              space-y-12
-              bg-gradient-to-b from-black/40 to-black/80
-              backdrop-blur-xl
-              border border-white/10
-              shadow-2xl
-              transition-all duration-300
-              hover:scale-[1.005]
-              hover:border-white/20
-            "
-          >
-            <div className="text-center space-y-3">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                Mayan Spacetime Reading
-              </p>
-              <h3 className="text-4xl font-serif font-semibold text-white">
-                Your Complete Profile
-              </h3>
-            </div>
-<div className="flex justify-center">
-  <div className="h-px w-40 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
-</div>
-<p className="text-white/90 text-xl">
-  {highlightText(narrative?.intro || "", highlightRules)}
-</p>
-
-<p className="text-white/80 text-lg">
-  {highlightText(narrative?.tone || "", highlightRules)}
-</p>
-
-<p className="text-white/80 text-lg">
-  {highlightText(narrative?.sign || "", highlightRules)}
-</p>
-
-<p className="text-purple-300 italic">
-  {highlightText(narrative?.interaction || "", highlightRules)}
-</p>
-
-<p className="text-white/70">
-  {highlightText(narrative?.lifeTheme || "", highlightRules)}
-</p>
-
-<p className="text-white/50 italic">
-  {highlightText(narrative?.closing || "", highlightRules)}
-</p>
-          </div>
-
-          {/* CARD 3: WORK & LOVE */}
-          <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8">
-            {/* WORK CARD */}
-            <div
-              className="
-                rounded-2xl
-                p-10
-                space-y-6
-                bg-gradient-to-br from-amber-900/20 to-amber-950/40
-                backdrop-blur-xl
-                border border-amber-400/20
-                shadow-xl
-                transition-all duration-300
-                hover:scale-[1.02]
-                hover:border-amber-400/30
-                hover:shadow-2xl
-              "
-            >
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">💼</div>
-                <h3 className="text-2xl font-serif font-semibold text-amber-400">Work & Career</h3>
+            {/* Navigation */}
+            <div className="p-6 border-t border-white/10 flex items-center justify-between">
+              <button
+                onClick={prevPage}
+                disabled={currentPage === 0}
+                className="px-6 py-2 rounded-lg bg-white/10 text-white font-semibold hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition"
+              >
+                ← Previous
+              </button>
+              
+              <div className="flex gap-2">
+                {[0, 1, 2, 3].map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-2 h-2 rounded-full transition ${
+                      currentPage === page ? 'bg-amber-400 w-8' : 'bg-white/30'
+                    }`}
+                  />
+                ))}
               </div>
-              <p className="text-white/80 leading-relaxed">
-                {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.work}
-              </p>
-            </div>
 
-            {/* LOVE CARD */}
-            <div
-              className="
-                rounded-2xl
-                p-10
-                space-y-6
-                bg-gradient-to-br from-pink-900/20 to-purple-950/40
-                backdrop-blur-xl
-                border border-pink-400/20
-                shadow-xl
-                transition-all duration-300
-                hover:scale-[1.02]
-                hover:border-pink-400/30
-                hover:shadow-2xl
-              "
-            >
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">💖</div>
-                <h3 className="text-2xl font-serif font-semibold text-pink-400">Love & Relationships</h3>
-              </div>
-              <p className="text-white/80 leading-relaxed">
-                {WORK_LOVE_BY_SIGN[result.sign.name as keyof typeof WORK_LOVE_BY_SIGN]?.love}
-              </p>
+              <button
+                onClick={nextPage}
+                disabled={currentPage === 3}
+                className="px-6 py-2 rounded-lg bg-white/10 text-white font-semibold hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition"
+              >
+                Next →
+              </button>
             </div>
           </div>
         </div>
